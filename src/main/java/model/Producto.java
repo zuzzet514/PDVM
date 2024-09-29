@@ -1,3 +1,5 @@
+package model;
+
 public class Producto {
     private static int numeroProducto;
     private int idProducto;

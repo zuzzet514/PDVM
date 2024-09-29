@@ -1,3 +1,5 @@
+package model;
+
 public class Escaner {
     private int idEscaner;
     private String nombreEscaner;
