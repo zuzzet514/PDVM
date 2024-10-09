@@ -1,29 +1,22 @@
 package com.example.PDVWM.model;
 
+import jakarta.persistence.*;
+
+@Entity
 public class Producto {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idProducto;
+
     private String nombre;
     private String descripcion;
     private double precio;
     private String codigoBarra;
     private String marca;
-    private Categoria categoria;
+    @ManyToOne
+    private Categoria idCategoria;
 
-    Producto(String nombre, String descripcion, double precio, String codigoBarra, String marca, Categoria categoria) {
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.precio = precio;
-        this.codigoBarra = codigoBarra;
-        this.marca = marca;
-        this.categoria = categoria;
-    }
-
-    Producto(String nombre, double precio, String codigoBarra, String marca, Categoria categoria) {
-        this.nombre = nombre;
-        this.precio = precio;
-        this.codigoBarra = codigoBarra;
-        this.marca = marca;
-        this.categoria = categoria;
+    protected Producto() {
     }
 
     public String getNombre() {
@@ -64,13 +57,5 @@ public class Producto {
 
     public void setMarca(String marca) {
         this.marca = marca;
-    }
-
-    public Categoria getCategoria() {
-        return categoria;
-    }
-
-    public void setCategoria(Categoria categoria) {
-        this.categoria = categoria;
     }
 }

@@ -1,11 +1,16 @@
 package com.example.PDVWM.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
+@Entity
 public class Categoria {
+
+    @Id
     private int idCategoria;
     private String nombre;
 
-    public Categoria(String nombre) {
-        this.nombre = nombre;
+    public Categoria() {
     }
 
     public String getNombre() {

@@ -1,10 +1,60 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8">
-    <title>PDV</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Punto de Venta</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
   </head>
   <body>
-    <h1>Bienvenido al PDV</h1>
+    <header class="navbar">
+      <ul class="menu">
+        <li><a href="#">PDV</a></li>
+        <li><a href="#">Inventario</a></li>
+        <li><a href="#">Suministrado</a></li>
+        <li><a href="#">Alertas</a></li>
+        <li><a href="#">Productos</a></li>
+        <li><a href="#">Rankings</a></li>
+        <li><a href="#">Administrador</a></li>
+      </ul>
+      <div class="icons">
+        <span class="icon-bell">🔔</span>
+        <span class="icon-help">❓</span>
+        <span class="icon-phone">📱</span>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="left-panel">
+        <input type="text" class="search" placeholder="Buscar">
+
+        <div class="cart">
+          <h3>🛒 Carrito de compras</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Clave</th>
+                <th>Nombre</th>
+                <th>Cantidad</th>
+                <th>Precio</th>
+                <th>Importe</th>
+              </tr>
+            </thead>
+          </table>
+          <button class="delete-btn">✖</button>
+        </div>
+      </section>
+
+      <section class="right-panel">
+        <div class="payment-summary">
+          <h3>Monto a pagar:</h3>
+          <p class="total-amount">$0.00</p>
+
+          <label for="payment">Pagó con:</label>
+          <input type="number" id="payment" name="payment" placeholder="$0.00">
+          <button class="accept-sale-btn">Aceptar venta</button>
+        </div>
+      </section>
+    </main>
   </body>
 </html>
