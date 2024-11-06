@@ -10,10 +10,13 @@
     width: 310px;
     height: 550px;
     border-radius: 5px;
-    display: grid;
     gap: 20px;
     margin: 5px;
+    flex-direction: column;
+}
 
+#inputAgregarProducto {
+    display: none;
 }
 
 .divInput {

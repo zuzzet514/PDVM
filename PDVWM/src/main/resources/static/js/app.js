@@ -1,9 +1,29 @@
+
+function mostrarAgregarProducto() {
+    document.getElementById('inputAgregarProducto').style.display = 'block';
+}
+
+function cancelarAgregarProducto() {
+    document.getElementById('inputAgregarProducto').style.display = 'none';
+
+}
+
+function mostrarCategorias() {
+    document.getElementById('productos').style.display = 'none';
+    document.getElementById('Scategoria').style.display = 'block';
+
+}
 document.addEventListener("DOMContentLoaded", function () {
+    // Mostrar la sección PDV por defecto al cargar la página
+        document.getElementById('pdv').style.display = 'block';
+
     // Funcionalidad para el menú de navegación
     const links = document.querySelectorAll('.menu-link');
 
     links.forEach(link => {
+
         link.addEventListener('click', function (event) {
+            
             event.preventDefault();
             const targetId = link.getAttribute('data-target');
 
@@ -13,6 +33,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 section.style.display = 'none'; // Oculta todas las secciones
             });
 
+            const categoriaSection = document.getElementById('Scategoria');
+            if (categoriaSection) {
+                categoriaSection.style.display = 'none'; // Oculta la sección de categorías
+            }
+
             // Mostrar la sección correspondiente
             const targetSection = document.getElementById(targetId);
             if (targetSection) {
@@ -21,8 +46,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    // Mostrar la sección PDV por defecto al cargar la página
-    document.getElementById('pdv').style.display = 'block';
 
     // Funcionalidad para eliminar todos los productos del carrito
     document.querySelector('.eliminarCarrito').addEventListener('click', function () {
@@ -114,5 +137,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 alert('Error al conectarse con el servidor');
             });
     };
+
+    // Oculta el formulario de agregar producto cuando se hace clic en "Cancelar"
+    document.querySelector('.cancelar-producto').addEventListener('click', function () {
+        document.getElementById('inputAgregarProducto').style.display = 'none';
+    });
 
 });
