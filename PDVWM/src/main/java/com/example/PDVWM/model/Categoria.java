@@ -1,13 +1,16 @@
 package com.example.PDVWM.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
+@Table(name="Categoria")
 public class Categoria {
 
     @Id
-    private int idCategoria;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long idCategoria;
+
+    @Column(name = "nombre")
     private String nombre;
 
     public Categoria() {
@@ -20,4 +23,11 @@ public class Categoria {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
+    public Long getIdCategoria() {
+        return idCategoria;
+    }
+    public void setIdCategoria(Long idCategoria) {
+        this.idCategoria = idCategoria;
+    }
+
 }

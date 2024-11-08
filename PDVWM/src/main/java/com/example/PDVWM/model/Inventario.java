@@ -1,20 +1,23 @@
 package com.example.PDVWM.model;
 
-import java.util.ArrayList;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name="Inventario")
 public class Inventario {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long idInventario;
+
+    @Column(name="stockActual")
     private int stockActual;
+
+    @Column(name="stockMinimo")
     private int strockMinimo;
-    private ArrayList<Producto> productos;
 
-    public void aumentarStock(int unidades){
+    public Inventario() {}
 
-    }
-    public void reducirStock(int unidades){
 
-    }
-
-    public int getStockActual(){
-        return stockActual;
-    }
 }

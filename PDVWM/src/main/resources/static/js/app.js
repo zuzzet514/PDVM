@@ -1,17 +1,27 @@
-
 function mostrarAgregarProducto() {
     document.getElementById('inputAgregarProducto').style.display = 'block';
 }
-
 function cancelarAgregarProducto() {
     document.getElementById('inputAgregarProducto').style.display = 'none';
 
 }
-
-function mostrarCategorias() {
+function mostrarSeccionCategorias() {
+    document.getElementById('inputAgregarProducto').style.display = 'none';
     document.getElementById('productos').style.display = 'none';
+    listarCategorias();
     document.getElementById('Scategoria').style.display = 'block';
+}
 
+function  mostrarApartadoProductos() {
+    document.getElementById('inputAgregarCategoria').style.display = 'none';
+    document.getElementById('Scategoria').style.display = 'none';
+    document.getElementById('productos').style.display = 'block';x
+}
+function  mostrarAgregarCategoria() {
+    document.getElementById('inputAgregarCategoria').style.display = 'block';
+}
+function cancelarAgregarCategoria() {
+    document.getElementById('inputAgregarCategoria').style.display = 'none';
 }
 document.addEventListener("DOMContentLoaded", function () {
     // Mostrar la sección PDV por defecto al cargar la página
@@ -23,20 +33,17 @@ document.addEventListener("DOMContentLoaded", function () {
     links.forEach(link => {
 
         link.addEventListener('click', function (event) {
-            
+
             event.preventDefault();
+
             const targetId = link.getAttribute('data-target');
+
 
             // Ocultar todas las secciones
             const allSections = document.querySelectorAll('.section');
             allSections.forEach(section => {
                 section.style.display = 'none'; // Oculta todas las secciones
             });
-
-            const categoriaSection = document.getElementById('Scategoria');
-            if (categoriaSection) {
-                categoriaSection.style.display = 'none'; // Oculta la sección de categorías
-            }
 
             // Mostrar la sección correspondiente
             const targetSection = document.getElementById(targetId);
@@ -137,10 +144,57 @@ document.addEventListener("DOMContentLoaded", function () {
                 alert('Error al conectarse con el servidor');
             });
     };
-
-    // Oculta el formulario de agregar producto cuando se hace clic en "Cancelar"
-    document.querySelector('.cancelar-producto').addEventListener('click', function () {
-        document.getElementById('inputAgregarProducto').style.display = 'none';
-    });
-
 });
+
+function agregarCategoria() {
+    const nombreCategoria = document.getElementById('nombreCategoria').value;
+
+    if (nombreCategoria.trim() === "") {
+        alert("El nombre de la categoria no puede estar vacio.");
+        return;
+    }
+    fetch('/api/categorias/guardar', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ nombre: nombreCategoria })
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error al guardar la categoría');
+            }
+            return response.json();
+        })
+        .then(data => {
+            alert('Categoría guardada correctamente');
+            console.log(data);
+            document.getElementById('nombreCategoria').value = '';
+
+            listarCategorias();
+        })
+        .catch(error => {
+            alert('Hubo un error al guardar la categoría');
+            console.log(error);
+        });
+}
+function listarCategorias() {
+    fetch('/api/categorias/listar')
+        .then(response => response.json())
+        .then(data => {
+            const tbody = document.getElementById('tablaCategorias');
+            tbody.innerHTML = ""; // Limpia la tabla antes de agregar nuevas filas
+
+            data.forEach(categoria => {
+                const row = document.createElement('tr');
+                const cellNombre = document.createElement('td');
+                cellNombre.textContent = categoria.nombre;
+
+                row.appendChild(cellNombre);
+                tbody.appendChild(row);
+            });
+        })
+        .catch(error => {
+            console.log('Error al obtener las categorías:', error);
+        });
+}
