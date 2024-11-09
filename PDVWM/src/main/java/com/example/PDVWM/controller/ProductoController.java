@@ -3,19 +3,21 @@ package com.example.PDVWM.controller;
 import com.example.PDVWM.model.Producto;
 import com.example.PDVWM.service.ProductoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/Agregarproductos")
+@RequestMapping("/productos")
 public class ProductoController {
 
     @Autowired
     private ProductoService productoService;
 
     // Obtener todos los productos
-    @GetMapping
+    @GetMapping("/AllProductos")
     public List<Producto> getAllProductos() {
         return productoService.getAllProductos();
     }
@@ -28,13 +30,20 @@ public class ProductoController {
 
     // Obtener un producto por ID
     @GetMapping("/{id}")
-    public Producto getProductoById(@PathVariable int id) {
-        return productoService.getProductoById(id);
+    public ResponseEntity<Producto> getProductoById(@PathVariable Long id) {
+        Producto producto = productoService.getProductoById(id);
+        return producto != null
+                ? new ResponseEntity<>(producto, HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    // Eliminar un producto
     @DeleteMapping("/{id}")
-    public void deleteProducto(@PathVariable int id) {
-        productoService.deleteProducto(id);
+    public ResponseEntity<Void> deleteProducto(@PathVariable Long id) {
+        if (productoService.getProductoById(id) != null) {
+            productoService.deleteProducto(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 }

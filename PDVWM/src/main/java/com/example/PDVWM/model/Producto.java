@@ -25,15 +25,18 @@ public class Producto {
     private String marca;
 
     @ManyToOne
-    private Categoria idCategoria;
+    @JoinColumn(name="idCategoria")
+    private Categoria categoria;
 
-    protected Producto() {
+    public Producto() {
     }
 
+    public Long getIdProducto() {
+        return idProducto;
+    }
     public String getNombre() {
         return nombre;
     }
-
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
@@ -41,7 +44,6 @@ public class Producto {
     public String getDescripcion() {
         return descripcion;
     }
-
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
@@ -49,7 +51,6 @@ public class Producto {
     public double getPrecio() {
         return precio;
     }
-
     public void setPrecio(double precio) {
         this.precio = precio;
     }
@@ -57,7 +58,6 @@ public class Producto {
     public String getCodigoBarra() {
         return codigoBarra;
     }
-
     public void setCodigoBarra(String codigoBarra) {
         this.codigoBarra = codigoBarra;
     }
@@ -65,8 +65,14 @@ public class Producto {
     public String getMarca() {
         return marca;
     }
-
     public void setMarca(String marca) {
         this.marca = marca;
+    }
+
+    public Categoria getCategoria() {
+        return categoria;
+    }
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
     }
 }

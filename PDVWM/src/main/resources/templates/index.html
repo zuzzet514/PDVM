@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Punto de Venta</title>
+  <link rel="stylesheet" th:href="@{/css/General.css}">
   <link rel="stylesheet" th:href="@{/css/Pdv.css}">
   <link rel="stylesheet" th:href="@{/css/Inventario.css}">
   <link rel="stylesheet" th:href="@{/css/Sumistrado.css}">
@@ -27,9 +28,9 @@
   </nav>
 
   <div class="icons">
-    <span class="icon-bell">🔔</span>
-    <span class="icon-help">❓</span>
-    <span class="icon-phone">📱</span>
+    <span id="icon-bell" class="icon">🔔</span>
+    <span id="icon-help" class="icon">❓</span>
+    <span id="icon-phone" class="icon">📱</span>
   </div>
 </header>
 
@@ -102,6 +103,7 @@
             </tr>
             </thead>
             <tbody>
+
             </tbody>
           </table>
         </div>
@@ -148,14 +150,15 @@
             <table>
               <thead>
               <tr>
-                <th>Clave</th>
                 <th>Nombre</th>
                 <th>Código de barras</th>
                 <th>Precio</th>
                 <th>Categoria</th>
+                <th>Marca</th>
               </tr>
               </thead>
-              <tbody>
+              <tbody id="tablaProducto">
+
               </tbody>
             </table>
           </div>
@@ -180,7 +183,9 @@
               </div>
               <div class="divInput">
                 <label>Categoría:</label>
-                <input class="input" type="text" id="categoria" name="categoria" required><br>
+                <select  class="DCategorias" id="categoria" name="categoria" required>
+                  <option value="">Selecciona una categoría</option>
+                </select>
               </div>
               <div class="divInput">
                 <label>Marca:</label>
@@ -192,7 +197,7 @@
               </div>
               <div class="divBotones">
                 <button onclick="cancelarAgregarProducto()" class="cancelar-producto">Cancelar</button>
-                <button onclick="agregarCategoria()" class="guardar-producto">Guardar</button>
+                <button type="button" onclick="crearProducto()" class="guardar-producto">Guardar</button>
               </div>
             </form>
           </div>

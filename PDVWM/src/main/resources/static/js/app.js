@@ -1,4 +1,5 @@
 function mostrarAgregarProducto() {
+    cargarCategorias();
     document.getElementById('inputAgregarProducto').style.display = 'block';
 }
 function cancelarAgregarProducto() {
@@ -6,24 +7,27 @@ function cancelarAgregarProducto() {
 
 }
 function mostrarSeccionCategorias() {
+    listarCategorias();
     document.getElementById('inputAgregarProducto').style.display = 'none';
     document.getElementById('productos').style.display = 'none';
-    listarCategorias();
     document.getElementById('Scategoria').style.display = 'block';
 }
 
 function  mostrarApartadoProductos() {
+    mostraProductosS();
     document.getElementById('inputAgregarCategoria').style.display = 'none';
     document.getElementById('Scategoria').style.display = 'none';
-    document.getElementById('productos').style.display = 'block';x
+    document.getElementById('productos').style.display = 'block';
 }
 function  mostrarAgregarCategoria() {
-    document.getElementById('inputAgregarCategoria').style.display = 'block';
+    document.getElementById('inputAgregarCategoria').style.display = 'block'
 }
 function cancelarAgregarCategoria() {
     document.getElementById('inputAgregarCategoria').style.display = 'none';
 }
 document.addEventListener("DOMContentLoaded", function () {
+    mostraProductosS();
+
     // Mostrar la sección PDV por defecto al cargar la página
         document.getElementById('pdv').style.display = 'block';
 
@@ -105,46 +109,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     });
-
-    // Funcionalidad para agregar producto
-    window.agregarProducto = function() {
-        const nombre = document.getElementById('nombre').value;
-        const codigoBarra = document.getElementById('codigoBarras').value;
-        const precio = parseFloat(document.getElementById('precio').value);
-        const descripcion = document.getElementById('descripcion').value;
-        const categoria = document.getElementById('categoria').value;
-        const marca = document.getElementById('marca').value;
-
-        const producto = {
-            nombre: nombre,
-            descripcion: descripcion,
-            precio: precio,
-            codigoBarra: codigoBarra,
-            marca: marca,
-            categoria: categoria
-        };
-
-        fetch('http://localhost:8081/agregarProducto', { // URL corregida
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(producto)
-        })
-            .then(response => {
-                if (response.ok) {
-                    alert('Producto agregado exitosamente');
-                    document.getElementById('inputAgregar').reset(); // Resetea el formulario
-                } else {
-                    alert('Error al agregar el producto');
-                }
-            })
-            .catch(error => {
-                console.error("Error", error);
-                alert('Error al conectarse con el servidor');
-            });
-    };
-});
+})
 
 function agregarCategoria() {
     const nombreCategoria = document.getElementById('nombreCategoria').value;
@@ -178,12 +143,13 @@ function agregarCategoria() {
             console.log(error);
         });
 }
+
 function listarCategorias() {
     fetch('/api/categorias/listar')
         .then(response => response.json())
         .then(data => {
             const tbody = document.getElementById('tablaCategorias');
-            tbody.innerHTML = ""; // Limpia la tabla antes de agregar nuevas filas
+            tbody.innerHTML = "";
 
             data.forEach(categoria => {
                 const row = document.createElement('tr');
@@ -192,6 +158,151 @@ function listarCategorias() {
 
                 row.appendChild(cellNombre);
                 tbody.appendChild(row);
+            });
+        })
+        .catch(error => {
+            console.log('Error al obtener las categorías:', error);
+        });
+}
+
+function cargarCategorias() {
+    fetch('/api/categorias/listar')
+        .then(response => response.json())
+        .then(data => {
+            const selectCategoria = document.getElementById('categoria');
+            selectCategoria.innerHTML = '<option value="">Selecciona una categoría</option>';
+
+            data.forEach(categoria => {
+                const option = document.createElement('option');
+                option.value = categoria.id;
+                option.textContent = categoria.nombre;
+                selectCategoria.appendChild(option);
+            });
+        })
+        .catch(error => console.log('Error al cargar categorías:', error));
+}
+
+let categorias = [];
+
+async function obtenerCategorias() {
+    try {
+        const response = await fetch('/api/categorias/listar');
+
+        if (!response.ok) {
+            throw new Error('Error al obtener las categorías');
+        }
+
+        categorias = await response.json();
+
+        console.log(categorias);
+    } catch (error) {
+        console.error('Hubo un problema al obtener las categorías:', error);
+    }
+}
+
+async function crearProducto() {
+    const nombre = document.getElementById('nombre').value.trim();
+    const descripcion = document.getElementById('descripcion').value.trim();
+    const precio = parseFloat(document.getElementById('precio').value);
+    const codigoBarra = document.getElementById('codigoBarras').value.trim();
+    const marca = document.getElementById('marca').value.trim();
+    const nombreCategoria = document.getElementById('categoria').value.trim();
+
+    if (!nombre || !descripcion || isNaN(precio) || !codigoBarra || !marca) {
+        alert("Todos los campos son obligatorios.");
+        return;
+    }
+
+    await obtenerCategorias();
+
+    let idCategoria = 0;
+
+    categorias.forEach(function (categoria) {
+        if (categoria.nombre === nombreCategoria) {
+            idCategoria = categoria.id;
+        }
+    });
+
+    const productoData = {
+        nombre,
+        descripcion,
+        precio,
+        codigoBarra,
+        marca,
+        idCategoria
+    };
+
+    fetch(`/productos`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(productoData)
+    })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(err => {
+                    throw new Error(err.message);
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            mostraProductosS();
+            console.log('Producto agregado:', data);
+            alert('Producto agregado con éxito');
+        })
+        .catch(error => {
+            console.error('Error al agregar el producto:', error);
+            alert(`Hubo un problema al agregar el producto: ${error.message}`);
+        });
+}
+
+let productos = [];
+async function obtenerProducto() {
+    try {
+        const response = await fetch('/productos/AllProductos');
+
+        if (!response.ok) {
+            throw new Error('Error al obtener lod productos');
+        }
+
+        productos = await response.json();
+
+    } catch (error) {
+        console.error('Hubo un problema al obtener los productos', error);
+    }
+}
+
+function mostraProductosS () {
+    fetch('/productos/AllProductos')
+        .then(response => response.json())
+        .then(data => {
+            const tbody = document.getElementById('tablaProducto');
+            tbody.innerHTML = "";
+
+            data.forEach(producto => {
+                const fila = document.createElement('tr');
+
+                const celdaNombre = document.createElement('td');
+                celdaNombre.textContent = producto.nombre;
+                fila.appendChild(celdaNombre);
+
+                const celdaCodigoBarra = document.createElement('td');
+                celdaCodigoBarra.textContent = producto.codigoBarra;
+                fila.appendChild(celdaCodigoBarra);
+
+                const celdaPrecio = document.createElement('td');
+                celdaPrecio.textContent = '$' + parseFloat(producto.precio).toFixed(2);
+                fila.appendChild(celdaPrecio);
+
+                const celdaCategoria= document.createElement('td');
+                celdaCategoria.textContent = producto.idCategoria;
+                fila.appendChild(celdaCategoria);
+
+                const celdaMarca = document.createElement('td');
+                celdaMarca.textContent = producto.marca;
+                fila.appendChild(celdaMarca);
+
+                tbody.appendChild(fila);
             });
         })
         .catch(error => {

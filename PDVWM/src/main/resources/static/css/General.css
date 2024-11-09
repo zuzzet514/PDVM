@@ -1,0 +1,14 @@
+.divGeneral {
+    width: 1500px;
+    height: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.menu-link, .icon {
+    border-radius: 5px;
+}
+.menu-link:hover, .icon:hover {
+    background-color: #1A4D80;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
