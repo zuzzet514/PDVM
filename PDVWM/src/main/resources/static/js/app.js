@@ -27,6 +27,7 @@ function cancelarAgregarCategoria() {
 }
 document.addEventListener("DOMContentLoaded", function () {
     mostraProductosS();
+    mostrarProductosInventario();
 
     // Mostrar la sección PDV por defecto al cargar la página
         document.getElementById('pdv').style.display = 'block';
@@ -256,7 +257,7 @@ async function crearProducto() {
         });
 }
 
-let productos = [];
+
 async function obtenerProducto() {
     try {
         const response = await fetch('/productos/AllProductos');
@@ -265,7 +266,7 @@ async function obtenerProducto() {
             throw new Error('Error al obtener lod productos');
         }
 
-        productos = await response.json();
+        return await response.json();
 
     } catch (error) {
         console.error('Hubo un problema al obtener los productos', error);
@@ -308,4 +309,43 @@ function mostraProductosS () {
         .catch(error => {
             console.log('Error al obtener las categorías:', error);
         });
+}
+
+function mostrarProductosInventario () {
+    fetch('/productos/AllProductos')
+        .then(response => response.json())
+        .then(data => {
+            const tbody = document.getElementById('tablaInventario');
+            tbody.innerHTML = "";
+
+            data.forEach(producto => {
+                const fila = document.createElement('tr');
+
+                const celdaProducto = document.createElement('td');
+                celdaProducto.textContent = producto.nombre;
+                fila.appendChild(celdaProducto);
+
+                const celdaCodigoBarras = document.createElement('td');
+                celdaCodigoBarras.textContent = producto.codigoBarra;
+                fila.appendChild(celdaCodigoBarras);
+
+                const celdaVendido = document.createElement('td');
+                celdaVendido.textContent = "20";
+                fila.appendChild(celdaVendido);
+
+                const celdaSuministro = document.createElement('td');
+                celdaSuministro.textContent = "20";
+                fila.appendChild(celdaSuministro);
+
+                const celdaStock = document.createElement('td');
+                celdaStock.textContent = "20";
+                fila.appendChild(celdaStock);
+
+                tablaInventario.appendChild(fila);
+            });
+        })
+        .catch(error => {
+            console.log('Error al obtener las categorías:', error);
+        });
+
 }
